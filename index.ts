@@ -23,7 +23,7 @@ const SIGMA = 100000000;
 const P_SIZE = 5;
 const G = new Vector2(0, 12000 * 9.8);
 // number of particles
-const NUM_PARTICLES = 500;
+const NUM_PARTICLES = 1000;
 const EPSILON = 0.001;
 // particles
 let particles: Particle[] = [];
@@ -82,7 +82,7 @@ const sort = () => {
   }
 };
 
-const adjacentCells = i => {
+const adjacentCells = (i) => {
   const cells = [
     i,
     i + 1,
@@ -92,10 +92,10 @@ const adjacentCells = i => {
     i - num_cols - 1,
     i + num_cols,
     i + num_cols + 1,
-    i + num_cols - 1
+    i + num_cols - 1,
   ]
-    .filter(cell => cell > 0 && cell < grid.length)
-    .map(cell => grid[cell]);
+    .filter((cell) => cell > 0 && cell < grid.length)
+    .map((cell) => grid[cell]);
   return cells;
 };
 
@@ -152,11 +152,8 @@ const computeForces = () => {
         }
 
       const fgrav = G.scale(pi.density);
-
-      pi.force = fpress
-        .add(fvisc)
-        .add(fgrav)
-        .add(fst);
+      // const fgrav = new Vector2();
+      pi.force = fpress.add(fvisc).add(fgrav).add(fst);
     }
   }
 };
@@ -191,10 +188,10 @@ const integrate = () => {
 
 const drawParticles = () => {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
-  particles.forEach(p => {
+  particles.forEach((p) => {
     ctx.beginPath();
     ctx.arc(p.position.x, p.position.y, P_SIZE, 0, Math.PI * 2);
-    ctx.stroke();
+    ctx.fill();
     ctx.closePath();
   });
 };
@@ -232,7 +229,7 @@ document.addEventListener("keypress", ({ key }) => {
           const jitter = Math.random() - 0.5;
           ps.push(new Particle(new Vector2(x + jitter, y)));
         }
-    ps.forEach(p => particles.push(p));
+    ps.forEach((p) => particles.push(p));
     sort();
   }
 });
